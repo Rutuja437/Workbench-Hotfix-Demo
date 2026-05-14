@@ -616,6 +616,55 @@ git push origin hotfix/1.5-AIRTEL-101
 
 ---
 
+# Release Tagging Strategy
+
+## Purpose
+
+Tags help identify:
+- deployed hotfix versions
+- production releases
+- rollback points
+- deployment history
+
+---
+
+# Tag Naming Format
+
+```text
+v<release-version>-hotfix<number>
+```
+
+Examples:
+
+```text
+v1.5-hotfix1
+v1.5-hotfix2
+```
+
+---
+
+# Create Annotated Tag
+
+```bash
+git tag -a v1.5-hotfix1 -m "Airtel deployment hotfix"
+```
+
+---
+
+# Push Tags
+
+```bash
+git push origin --tags
+```
+
+---
+
+# View Tags
+
+```bash
+git tag
+```
+
 # Hotfix Cleanup
 
 ## Delete Local Hotfix Branch
