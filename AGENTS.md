@@ -550,21 +550,49 @@ git push origin release/1.5
 
 # Recovery Commands
 
-View repository history:
+## View Repository History
 
 ```bash
 git reflog
 ```
 
-Recover previous state:
-
-```bash
-git reset --hard <commit-id>
-```
-
-Use carefully.
+Use reflog to:
+- recover lost commits
+- identify previous HEAD states
+- restore accidental resets
+- recover deleted branch states
 
 ---
+
+# Git History Inspection
+
+## View Commit History
+
+```bash
+git log --oneline --graph --all
+```
+
+---
+
+## View Current Branch
+
+```bash
+git branch
+```
+
+---
+
+## View Remote Branches
+
+```bash
+git branch -r
+```
+
+Before suggesting commands, always verify:
+- current branch
+- uncommitted changes
+- pending merge conflicts
+
 
 # Git Push Workflow
 
@@ -653,7 +681,6 @@ git reflog
 Use carefully:
 
 ```bash
-git reset --hard
 git push --force
 ```
 
