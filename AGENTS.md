@@ -41,7 +41,6 @@ Workbench-Hotfix-Demo/
 │
 ├── docs/
 │   ├── AGENTS.md
-│   ├── hotfix-conflicts.md
 │   └── implementation.md
 │
 └── README.md
