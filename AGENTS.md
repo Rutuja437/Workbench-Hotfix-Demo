@@ -462,6 +462,39 @@ git rebase --abort
 
 ---
 
+# Git Stash Workflow
+
+## When to Use
+
+Use stash when:
+- branch switching required
+- work not ready for commit
+- urgent hotfix interrupts current work
+
+---
+
+# Save Changes
+
+```bash
+git stash
+```
+
+---
+
+# View Stashes
+
+```bash
+git stash list
+```
+
+---
+
+# Restore Changes
+
+```bash
+git stash pop
+```
+
 # Revert / Rollback Strategy
 
 ## Important Rule
