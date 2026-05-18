@@ -30,9 +30,23 @@ hotfix/*    → temporary hotfix branches
 | Type | Pattern | Example |
 |------|---------|---------|
 | Release | `release/<version>` | `release/1.5` |
-| Hotfix | `hotfix/<release>-<CUSTOMER>-<ticket>` | `hotfix/1.5-AIRTEL-101` |
+| Generic Hotfix | `hotfix/<release>-<ticket>` | `hotfix/1.5-101` |
+| Customer Hotfix | `hotfix/<release>-<CUSTOMER>-<ticket>` | `hotfix/1.5-AIRTEL-101` |
 
-Reject: `hotfix/test`, `hotfix/fix`, `hotfix/temp`, or any hotfix not from a release branch.
+Reject:
+- `hotfix/test`
+- `hotfix/fix`
+- `hotfix/temp`
+- any hotfix not created from a release branch
+
+---
+
+## Tag Naming
+
+| Type | Example |
+|---|---|
+| Generic Hotfix | `v1.5.0-hf1` |
+| Customer Hotfix | `v1.5.0-airtel-hf1` |
 
 ---
 
@@ -45,11 +59,25 @@ git pull origin release/<version>
 ```
 **Error:** Pull fails → STOP. Report exact error. If conflict on pull → ask user how to proceed.
 
+---
+
 ### Step 2 — Create Hotfix Branch
+
+#### Customer Hotfix
+
 ```bash
 git checkout -b hotfix/<release>-<CUSTOMER>-<ticket>
 ```
+
+#### Generic Hotfix
+
+```bash
+git checkout -b hotfix/<release>-<ticket>
+```
+
 **Error:** Branch exists → switch to it, notify user.
+
+---
 
 ### Step 3 — Verify and Commit
 ```bash
@@ -65,7 +93,11 @@ git checkout release/<version>
 git merge --no-ff hotfix/<release>-<CUSTOMER>-<ticket>
 ```
 **Error:** Conflict → STOP → list conflicting files → wait for user resolution → `git add . && git commit`.
-To abort: `git merge --abort`
+To abort:
+
+```bash
+git merge --abort
+```
 
 #### Merge Strategy Selection
 | Condition | Command |
