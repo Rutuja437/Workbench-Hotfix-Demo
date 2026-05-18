@@ -217,3 +217,27 @@ Result: SUCCESS | FAILED | BLOCKED
 Notes: <warnings, conflicts, or deviations>
 ACTION REQUIRED: <what user needs to do — only if blocked>
 ```
+
+## Hotfix Lifecycle
+
+```mermaid
+gitGraph
+    commit id: "Initial Release"
+
+    branch "release/1.5"
+
+    checkout "release/1.5"
+    commit id: "Release Stabilization"
+
+    branch "hotfix/1.5-AIRTEL-101"
+
+    checkout "hotfix/1.5-AIRTEL-101"
+    commit id: "Fix customer login timeout"
+
+    checkout "release/1.5"
+    merge "hotfix/1.5-AIRTEL-101"
+    commit tag: "v1.5.0-airtel-hf1"
+
+    checkout main
+    cherry-pick id: "Fix customer login timeout"
+```
