@@ -23,6 +23,9 @@ main
         ├── tenant/customerB
         └── tenant/customerC
 ```
+*main → Future development.
+*release/1.0 → Stable code for version 1.0.
+*tenant/customerA → Version 1.0 + Customer A's customizations.
 
 ---
 
