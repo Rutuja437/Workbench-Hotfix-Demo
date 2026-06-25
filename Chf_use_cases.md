@@ -13,15 +13,15 @@ Developer
 ```text
 main
  │
- └── release/3.8
+ └── release/1.0.0
         │
-        ├── tenant/airtel/3.8
-        └── tenant/reliance/3.8
+        ├── tenant/airtel/1.0.0
+        └── tenant/reliance/1.0.0
 ```
 
 ## Preconditions
 
-* tenant/airtel/3.8 is an active supported branch.
+* tenant/airtel/1.0.0 is an active supported branch.
 * Issue has been classified as tenant-specific.
 * No active hotfix exists for the same ticket.
 
@@ -34,7 +34,7 @@ Issue:
 Airtel branding typo
 
 Target Branch:
-tenant/airtel/3.8
+tenant/airtel/1.0.0
 
 Propagation Mode:
 Tenant Only
@@ -44,10 +44,10 @@ None
 
 ## Main Success Flow
 
-1. Create a hotfix branch from tenant/airtel/3.8.
+1. Create a hotfix branch from tenant/airtel/1.0.0
 2. Apply the requested fix.
 3. Validate the fix.
-4. Merge the hotfix back into tenant/airtel/3.8.
+4. Merge the hotfix back into tenant/airtel/1.0.0
 5. Create deployment tag.
 6. Generate deployment artifact.
 
@@ -61,8 +61,8 @@ E2. Merge fails.
 
 ## Expected Result
 
-* Hotfix branch created from tenant/airtel/3.8.
-* Fix merged back into tenant/airtel/3.8.
+* Hotfix branch created from tenant/airtel/1.0.0
+* Fix merged back into tenant/airtel/1.0.0
 * Deployment tag created.
 * Deployment artifact generated.
 * No propagation outside tenant branch.
@@ -70,11 +70,11 @@ E2. Merge fails.
 ## Expected Git Graph
 
 ```text
-A ── B ── C ─────────── M  (tenant/airtel/3.8)
+A ── B ── C ─────────── M  (tenant/airtel/1.0.0)
           \            /
            HF-ART001──
 
-release/3.8
+release/1.0.0
     │
     └── unchanged
 
@@ -87,8 +87,8 @@ main
 
 ### Automated / Harness Checks
 
-* Verify fix exists in tenant/airtel/3.8.
-* Verify fix does not exist in release/3.8.
+* Verify fix exists in tenant/airtel/1.0.0
+* Verify fix does not exist in release/1.0.0
 * Verify fix does not exist in main.
 * Verify deployment tag exists.
 * Verify deployment artifact exists.
@@ -99,8 +99,8 @@ main
 
 ## Pass Criteria
 
-* Fix present in tenant/airtel/3.8.
-* Fix absent from release/3.8.
+* Fix present in tenant/airtel/1.0.0
+* Fix absent from release/1.0.0
 * Fix absent from main.
 * Tag created successfully.
 * Artifact generated successfully.
@@ -115,7 +115,7 @@ main
 
 ## Postconditions / Guarantees
 
-* tenant/airtel/3.8 contains the fix.
+* tenant/airtel/1.0.0 contains the fix.
 * Shared branches remain unchanged.
 
 ## Notes
@@ -139,11 +139,11 @@ Developer
 ```text
 main
  │
- └── release/3.8
+ └── release/1.0.0
         │
-        ├── tenant/airtel/3.8
-        ├── tenant/reliance/3.8
-        └── tenant/tata/3.8
+        ├── tenant/airtel/1.0.0
+        ├── tenant/reliance/1.0.0
+        └── tenant/tata/1.0.0
 ```
 
 ## Preconditions
@@ -161,20 +161,20 @@ Issue:
 Shared framework defect
 
 Target Branch:
-tenant/airtel/3.8
+tenant/airtel/1.0.0
 
 Propagation Mode:
 Release + Main
 
 Additional Parameters:
-Affected Release Line = 3.8
+Affected Release Line = 1.0.0
 
 ## Main Success Flow
 
 1. Create tenant hotfix branch.
 2. Apply and validate the fix.
-3. Merge fix into tenant/airtel/3.8.
-4. Propagate validated fix to release/3.8.
+3. Merge fix into tenant/airtel/1.0.0
+4. Propagate validated fix to release/1.0.0
 5. Propagate validated fix to main.
 6. Generate release artifact.
 
@@ -196,13 +196,13 @@ E2. Propagation fails.
 ## Expected Git Graph
 
 ```text
-tenant/airtel/3.8
+tenant/airtel/1.0.0
 
 A ── B ── C ─────────── M
           \            /
            HF-451─────
 
-release/3.8
+release/1.0.0
 
 R1 ── R2 ── FIX-451
 
@@ -215,8 +215,8 @@ M1 ── M2 ── FIX-451
 
 ### Automated / Harness Checks
 
-* Verify fix exists in tenant/airtel/3.8.
-* Verify fix exists in release/3.8.
+* Verify fix exists in tenant/airtel/1.0.0
+* Verify fix exists in release/1.0.0
 * Verify fix exists in main.
 * Verify release tag exists.
 * Verify release artifact exists.
@@ -261,7 +261,7 @@ Release Engineer
 ## Repository Setup
 
 ```text
-tenant/airtel/3.8
+tenant/airtel/1.0.0
 ```
 
 ## Preconditions
@@ -279,7 +279,7 @@ Issue:
 Multiple approved tenant fixes
 
 Target Branch:
-tenant/airtel/3.8
+tenant/airtel/1.0.0
 
 Propagation Mode:
 Tenant Only
@@ -369,7 +369,7 @@ Release Engineer
 ## Repository Setup
 
 ```text
-release/3.8
+release/1.0.0
 ```
 
 ## Preconditions
@@ -386,7 +386,7 @@ Issue:
 Release patch set
 
 Target Branch:
-release/3.8
+release/1.0.0
 
 Propagation Mode:
 Release Branch
@@ -399,7 +399,7 @@ BUG-501
 
 ## Main Success Flow
 
-1. Create CHF branch from release/3.8.
+1. Create CHF branch from release/1.0.0
 2. Aggregate approved fixes.
 3. Validate combined patch set.
 4. Merge CHF into release branch.
@@ -480,7 +480,7 @@ Release Engineer
 
 ```text
 main
-release/3.8
+release/1.0.0
 ```
 
 ## Preconditions
@@ -621,7 +621,7 @@ E1. Conflict detected.
 ## Expected Git Graph
 
 ```text
-release/3.8
+release/1.0.0
 
 R1 ── R2 ── CONFLICTING_CHANGE
 
@@ -673,7 +673,7 @@ Release Manager
 ## Repository Setup
 
 ```text
-release/3.8
+release/1.0.0
 Status: EoL
 ```
 
@@ -690,7 +690,7 @@ Issue:
 Attempt to patch EoL release
 
 Target Branch:
-release/3.8
+release/1.0.0
 
 Propagation Mode:
 Release Branch
@@ -716,7 +716,7 @@ Request rejected.
 ## Expected Git Graph
 
 ```text
-release/3.8 (EoL)
+release/1.0.0 (EoL)
 
 R1 ── R2 ── R3
 ```
