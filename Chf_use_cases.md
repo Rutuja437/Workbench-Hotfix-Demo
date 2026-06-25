@@ -374,7 +374,7 @@ Validates future-development synchronization.
 
 ---
 
-## UC-008: Cherry-Pick Conflict Escalation
+## UC-008: Cherry-Pick Conflict Detection
 
 ### Objective
 
