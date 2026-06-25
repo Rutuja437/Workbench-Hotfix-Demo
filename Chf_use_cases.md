@@ -1,10 +1,14 @@
-## UC-001: Tenant-Specific Hotfix
+# UC-001: Tenant-Specific Hotfix
 
-### Brief Description 
+## Brief Description
 
 Validate that a tenant-specific hotfix is applied only to the target tenant branch and is not propagated to shared branches.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 ```text
 main
@@ -15,13 +19,13 @@ main
         └── tenant/reliance/3.8
 ```
 
-### Preconditions
+## Preconditions
 
 * tenant/airtel/3.8 is an active supported branch.
 * Issue has been classified as tenant-specific.
 * No active hotfix exists for the same ticket.
 
-### Input
+## Input
 
 Ticket:
 ART-001
@@ -38,11 +42,24 @@ Tenant Only
 Additional Parameters:
 None
 
-### Execution
+## Main Success Flow
 
-Create and execute a hotfix on the target tenant branch.
+1. Create a hotfix branch from tenant/airtel/3.8.
+2. Apply the requested fix.
+3. Validate the fix.
+4. Merge the hotfix back into tenant/airtel/3.8.
+5. Create deployment tag.
+6. Generate deployment artifact.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. Validation fails.
+- Hotfix is not merged.
+
+E2. Merge fails.
+- Execution stops and reports failure.
+
+## Expected Result
 
 * Hotfix branch created from tenant/airtel/3.8.
 * Fix merged back into tenant/airtel/3.8.
@@ -50,7 +67,25 @@ Create and execute a hotfix on the target tenant branch.
 * Deployment artifact generated.
 * No propagation outside tenant branch.
 
-### Verification
+## Expected Git Graph
+
+```text
+A ── B ── C ─────────── M  (tenant/airtel/3.8)
+          \            /
+           HF-ART001──
+
+release/3.8
+    │
+    └── unchanged
+
+main
+    │
+    └── unchanged
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify fix exists in tenant/airtel/3.8.
 * Verify fix does not exist in release/3.8.
@@ -58,7 +93,11 @@ Create and execute a hotfix on the target tenant branch.
 * Verify deployment tag exists.
 * Verify deployment artifact exists.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm no propagation outside tenant branch.
+
+## Pass Criteria
 
 * Fix present in tenant/airtel/3.8.
 * Fix absent from release/3.8.
@@ -66,7 +105,7 @@ Create and execute a hotfix on the target tenant branch.
 * Tag created successfully.
 * Artifact generated successfully.
 
-### Failure Criteria
+## Failure Criteria
 
 * Fix propagated to release branch.
 * Fix propagated to main.
@@ -74,19 +113,28 @@ Create and execute a hotfix on the target tenant branch.
 * Artifact missing.
 * Merge failure.
 
-### Notes
+## Postconditions / Guarantees
+
+* tenant/airtel/3.8 contains the fix.
+* Shared branches remain unchanged.
+
+## Notes
 
 Validates tenant-only propagation rules.
 
 ---
 
-## UC-002: Shared Product Hotfix
+# UC-002: Shared Product Hotfix
 
-### Objective
+## Brief Description
 
 Validate that a shared product defect is propagated through tenant, release, and main branches.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 ```text
 main
@@ -98,13 +146,13 @@ main
         └── tenant/tata/3.8
 ```
 
-### Preconditions
+## Preconditions
 
 * Defect affects multiple tenants.
 * Release branch is supported.
 * Impact analysis approved propagation.
 
-### Input
+## Input
 
 Ticket:
 BUG-451
@@ -121,18 +169,51 @@ Release + Main
 Additional Parameters:
 Affected Release Line = 3.8
 
-### Execution
+## Main Success Flow
 
-Execute tenant hotfix and propagate validated fix to release and main.
+1. Create tenant hotfix branch.
+2. Apply and validate the fix.
+3. Merge fix into tenant/airtel/3.8.
+4. Propagate validated fix to release/3.8.
+5. Propagate validated fix to main.
+6. Generate release artifact.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. Validation fails.
+- Propagation does not occur.
+
+E2. Propagation fails.
+- Execution stops and reports failure.
+
+## Expected Result
 
 * Fix applied to tenant branch.
 * Fix propagated to release branch.
 * Fix propagated to main.
 * Release artifact generated.
 
-### Verification
+## Expected Git Graph
+
+```text
+tenant/airtel/3.8
+
+A ── B ── C ─────────── M
+          \            /
+           HF-451─────
+
+release/3.8
+
+R1 ── R2 ── FIX-451
+
+main
+
+M1 ── M2 ── FIX-451
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify fix exists in tenant/airtel/3.8.
 * Verify fix exists in release/3.8.
@@ -140,44 +221,56 @@ Execute tenant hotfix and propagate validated fix to release and main.
 * Verify release tag exists.
 * Verify release artifact exists.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm propagation path follows approved impact analysis.
+
+## Pass Criteria
 
 * Fix available in all required branches.
 * Release tag created.
 * Release artifact generated.
 
-### Failure Criteria
+## Failure Criteria
 
 * Fix missing from release branch.
 * Fix missing from main.
 * Release tag missing.
 * Release artifact missing.
 
-### Notes
+## Postconditions / Guarantees
+
+* Fix available in tenant, release, and main branches.
+
+## Notes
 
 Validates shared-defect propagation flow.
 
 ---
 
-## UC-003: Tenant CHF
+# UC-003: Tenant CHF
 
-### Objective
+## Brief Description
 
 Validate that multiple approved tenant fixes can be packaged into a single CHF.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 ```text
 tenant/airtel/3.8
 ```
 
-### Preconditions
+## Preconditions
 
 * Multiple approved fixes exist.
 * Tenant branch is active.
 * All fixes passed review.
 
-### Input
+## Input
 
 Ticket:
 CHF-001
@@ -197,11 +290,21 @@ HF-101
 HF-102
 HF-103
 
-### Execution
+## Main Success Flow
 
-Create CHF containing all approved fixes.
+1. Create CHF branch.
+2. Include approved fixes.
+3. Validate combined patch set.
+4. Merge CHF into tenant branch.
+5. Create CHF tag.
+6. Generate CHF artifact.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. One fix fails validation.
+- CHF execution stops.
+
+## Expected Result
 
 * CHF branch created.
 * All approved fixes included.
@@ -209,50 +312,72 @@ Create CHF containing all approved fixes.
 * CHF tag created.
 * CHF artifact generated.
 
-### Verification
+## Expected Git Graph
+
+```text
+A ── B ── C ─────────────────── M
+          \                    /
+           HF-101 ─ HF-102 ─ HF-103
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify all fixes exist in CHF.
 * Verify CHF tag exists.
 * Verify CHF artifact exists.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm all approved fixes are included.
+
+## Pass Criteria
 
 * All approved fixes included.
 * CHF merged successfully.
 * Tag generated.
 * Artifact generated.
 
-### Failure Criteria
+## Failure Criteria
 
 * Missing approved fix.
 * CHF merge failure.
 * Tag missing.
 * Artifact missing.
 
-### Notes
+## Postconditions / Guarantees
+
+* Tenant branch contains all approved fixes.
+
+## Notes
 
 Validates cumulative tenant patch delivery.
 
 ---
 
-## UC-004: Release CHF
+# UC-004: Release CHF
 
-### Objective
+## Brief Description
 
 Validate that multiple shared fixes can be aggregated into a release CHF.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 ```text
 release/3.8
 ```
 
-### Preconditions
+## Preconditions
 
 * Multiple approved shared fixes exist.
 * Release branch is supported.
 
-### Input
+## Input
 
 Ticket:
 CHF-REL-001
@@ -272,11 +397,21 @@ BUG-451
 BUG-488
 BUG-501
 
-### Execution
+## Main Success Flow
 
-Create a Consolidated Hotfix (CHF) branch from release/3.8 that combines all approved fixes included in the request and prepares them for release validation.
+1. Create CHF branch from release/3.8.
+2. Aggregate approved fixes.
+3. Validate combined patch set.
+4. Merge CHF into release branch.
+5. Create release tag.
+6. Generate release artifact.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. One fix fails validation.
+- CHF execution stops.
+
+## Expected Result
 
 * Release CHF created.
 * Approved fixes aggregated.
@@ -284,50 +419,76 @@ Create a Consolidated Hotfix (CHF) branch from release/3.8 that combines all app
 * Release tag created.
 * Release artifact generated.
 
-### Verification
+## Expected Git Graph
+
+```text
+R1 ── R2 ── R3 ─────────────── M
+               \             /
+                CHF-REL-001
+                   │
+                   ├── BUG-451
+                   ├── BUG-488
+                   └── BUG-501
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify all fixes exist in release CHF.
 * Verify release tag exists.
 * Verify release artifact exists.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm release patch set contains all approved fixes.
+
+## Pass Criteria
 
 * All approved fixes included.
 * Release tag created.
 * Release artifact generated.
 
-### Failure Criteria
+## Failure Criteria
 
 * Missing fix.
 * CHF merge failure.
 * Release tag missing.
 * Release artifact missing.
 
-### Notes
+## Postconditions / Guarantees
+
+* Release branch contains approved CHF contents.
+
+## Notes
 
 Validates release packaging workflow.
 
 ---
 
-## UC-005: Forward-Port Release Fixes to Main
+# UC-005: Forward-Port Release Fixes to Main
 
-### Objective
+## Brief Description
 
 Validate that validated release fixes are propagated to main.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 ```text
 main
 release/3.8
 ```
 
-### Preconditions
+## Preconditions
 
 * Release fixes already validated.
 * Main branch available.
 
-### Input
+## Input
 
 Ticket:
 FP-001
@@ -346,49 +507,83 @@ Additional Parameters:
 BUG-451
 BUG-488
 
-### Execution
+## Main Success Flow
 
-Propagate validated release fixes to main.
+1. Identify validated release fixes.
+2. Propagate fixes to main.
+3. Validate propagated changes.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. Propagation failure.
+- Execution stops and reports failure.
+
+## Expected Result
 
 * Validated fixes become available in main.
 
-### Verification
+## Expected Git Graph
+
+```text
+release/3.8
+
+R1 ── R2 ── FIX-451 ── FIX-488
+
+
+main
+
+M1 ── M2 ── FP-451 ── FP-488
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify fixes exist in main.
 * Verify propagated fixes match release branch fixes.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm release and main contain equivalent fixes.
+
+## Pass Criteria
 
 * All validated fixes available in main.
 
-### Failure Criteria
+## Failure Criteria
 
 * Missing fix in main.
 * Propagation failure.
 
-### Notes
+## Postconditions / Guarantees
+
+* Main contains validated release fixes.
+
+## Notes
 
 Validates future-development synchronization.
 
 ---
 
-## UC-008: Cherry-Pick Conflict Handling
+# UC-008: Cherry-Pick Conflict Handling
 
-### Objective
+## Brief Description
 
 Validate escalation handling when a fix cannot be applied cleanly.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 Target branch contains conflicting code.
 
-### Preconditions
+## Preconditions
 
 * Incoming fix conflicts with target branch state.
 
-### Input
+## Input
 
 Ticket:
 BUG-451
@@ -405,56 +600,88 @@ Release Branch
 Additional Parameters:
 Conflict expected
 
-### Execution
+## Main Success Flow
 
-Attempt propagation of fix.
+1. Attempt propagation of fix.
+2. Detect conflict.
+3. Stop execution.
+4. Generate escalation information.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. Conflict detected.
+- Escalate and stop.
+
+## Expected Result
 
 * Execution stops.
 * Escalation artifact generated.
 * No automatic conflict resolution performed.
 
-### Verification
+## Expected Git Graph
+
+```text
+release/3.8
+
+R1 ── R2 ── CONFLICTING_CHANGE
+
+(No new commit created)
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify escalation artifact exists.
 * Verify conflict details recorded.
 * Verify no further propagation occurred.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm no manual conflict resolution was performed.
+
+## Pass Criteria
 
 * Conflict escalated successfully.
 
-### Failure Criteria
+## Failure Criteria
 
 * Silent conflict resolution.
 * Partial propagation.
 * Missing escalation record.
 
-### Notes
+## Postconditions / Guarantees
+
+* Repository remains unchanged after conflict detection.
+
+## Notes
 
 Validates safe failure handling.
 
 ---
 
-## UC-009: End-of-Life Branch Protection
+# UC-009: End-of-Life Branch Protection
 
-### Objective
+## Brief Description
 
 Validate that EoL branches reject new CHF and hotfix requests.
 
-### Repository Setup
+## Primary Actor
+
+HOTFIX-ORCHESTRATOR
+
+## Repository Setup
 
 ```text
 release/3.8
 Status: EoL
 ```
 
-### Preconditions
+## Preconditions
 
 * Branch marked End-of-Life.
 
-### Input
+## Input
 
 Ticket:
 CHF-999
@@ -471,33 +698,55 @@ Release Branch
 Additional Parameters:
 None
 
-### Execution
+## Main Success Flow
 
-Attempt CHF creation.
+1. Receive CHF request.
+2. Check branch support status.
+3. Reject execution.
 
-### Expected Result
+## Alternative / Exception Flows
+
+E1. Branch incorrectly marked active.
+- Continue normal processing.
+
+## Expected Result
 
 Request rejected.
 
-### Verification
+## Expected Git Graph
+
+```text
+release/3.8 (EoL)
+
+R1 ── R2 ── R3
+```
+
+## Verification
+
+### Automated / Harness Checks
 
 * Verify no CHF branch created.
 * Verify no new commits added.
 * Verify rejection recorded.
 
-### Pass Criteria
+### Manual Inspection Points
+
+* Confirm EoL policy enforcement.
+
+## Pass Criteria
 
 * EoL branch remains unchanged.
 
-### Failure Criteria
+## Failure Criteria
 
 * CHF created.
 * Commit added.
 * Branch modified.
 
-### Notes
+## Postconditions / Guarantees
+
+* EoL branch history remains unchanged.
+
+## Notes
 
 Validates EoL enforcement.
-
----
-
