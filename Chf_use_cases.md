@@ -1,6 +1,6 @@
 ## UC-001: Tenant-Specific Hotfix
 
-### Objective
+### Brief Description 
 
 Validate that a tenant-specific hotfix is applied only to the target tenant branch and is not propagated to shared branches.
 
