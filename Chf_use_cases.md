@@ -6,7 +6,7 @@ Validate that a tenant-specific hotfix is applied only to the target tenant bran
 
 ## Primary Actor
 
-HOTFIX-ORCHESTRATOR
+Developer
 
 ## Repository Setup
 
@@ -132,7 +132,7 @@ Validate that a shared product defect is propagated through tenant, release, and
 
 ## Primary Actor
 
-HOTFIX-ORCHESTRATOR
+Developer
 
 ## Repository Setup
 
@@ -256,7 +256,7 @@ Validate that multiple approved tenant fixes can be packaged into a single CHF.
 
 ## Primary Actor
 
-HOTFIX-ORCHESTRATOR
+Release Engineer
 
 ## Repository Setup
 
@@ -364,7 +364,7 @@ Validate that multiple shared fixes can be aggregated into a release CHF.
 
 ## Primary Actor
 
-HOTFIX-ORCHESTRATOR
+Release Engineer
 
 ## Repository Setup
 
@@ -474,7 +474,7 @@ Validate that validated release fixes are propagated to main.
 
 ## Primary Actor
 
-HOTFIX-ORCHESTRATOR
+Release Engineer
 
 ## Repository Setup
 
@@ -668,7 +668,7 @@ Validate that EoL branches reject new CHF and hotfix requests.
 
 ## Primary Actor
 
-HOTFIX-ORCHESTRATOR
+Release Manager
 
 ## Repository Setup
 
